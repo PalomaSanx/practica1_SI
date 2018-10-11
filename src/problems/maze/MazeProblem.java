@@ -61,69 +61,109 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 	@Override
 	public State initialState() {
-		// TODO Auto-generated method stub
-		return new MazeState(maze.input());
+		// TODO Auto-generated method stub //se inicia estado x=x y=0, quesos=0 y gatos=0;
+		return new MazeState(maze.input(),0,0);
 	}
 
 	@Override
 	public State applyAction(State state, Action action) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub// devuelve el estado después de aplicar una accion 'a' a un estado 'e'.
 
 		MazeState mazeState = (MazeState) state;
 		MazeAction mazeAction = (MazeAction) action;
 		int x=mazeState.position.x;
 		int y=mazeState.position.y;
-
+		
 		if ((maze.containsCheese(mazeState.position))) {
 			mazeState.numCheese++;
 			// quitar queso de matriz
 		} else if ((maze.containsCat(mazeState.position))) {
 			if (mazeState.numCat == 2) {
 				// mueres
+				return null;
 			}
 			mazeState.numCat++;
 			// aumentamos el coste x2
 		} else {
 			// nos movemos
 			switch (mazeAction) {
-			case RIGHT: x++;
-
+			case RIGHT: if(maze.cellGraph.get(mazeState.posX).equals(x++)) {
+							x++;
+						}
 				break;
-			case LEFT:	x--;
-
+			case LEFT:if(maze.cellGraph.get(mazeState.posX).equals(x--)) {
+				x--;
+			}
 				break;
-			case UP:	y--;
+			case UP:if(maze.cellGraph.get(mazeState.posX).equals(y--)) {
+					y--;
+				}
 				break;
 
-			case DOWN: y++;
+			case DOWN: if(maze.cellGraph.get(mazeState.posX).equals(y++)) {
+				y++;
 				break;
 			}			
+		  }
 		}
 		
 		if(x<0 || x>maze.size-1 || y<0 || y>maze.size-1) {
 			return null;
-		}else {
+		}
 			
 			return new MazeState(x,y,mazeState.numCheese,mazeState.numCat);
-		}
+		
 		
 	}
 
 	@Override
 	public ArrayList<Action> getPossibleActions(State state) {
 		// TODO Auto-generated method stub
+		//comprobamos si se puede realizar la accion:RIGHT
+		//comprobamos si se puede realizar la accion:LEFT
+		//comprobamos si se puede realizar la accion:UP
+		//comprobamos si se puede realizar la accion:DOWN
+		//comprobamos si se puede realizar la accion:EAT
+		MazeState mazestate = (MazeState)state;
+		ArrayList<Action> possibleActions = new ArrayList<Action>();
+		
+		Action[] acciones= {MazeAction.RIGHT,MazeAction.LEFT,MazeAction.UP,MazeAction.DOWN};
+		
+		for(Action accion: acciones) {
+			if(applyAction(mazestate, accion)!= null) {
+				possibleActions.add(accion);
+			}
+		}
+		
 		return null;
 	}
 
 	@Override
 	public double cost(State state, Action action) {
-		// TODO Auto-generated method stub
-		return 0;
+		// TODO Auto-generated method stub //si gato=1 el coste x2.
+		
+		MazeState mazestate =(MazeState)state;
+		MazeAction mazeaction =(MazeAction)action;
+		
+		MazeState estado_nuevo =(MazeState) applyAction(mazestate, mazeaction);
+		
+		if(estado_nuevo.numCat==1) {
+			return 2;
+		}		
+		
+		return 1;
 	}
 
 	@Override
 	public boolean testGoal(State chosen) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub //¿Soy estado objetivo?
+		
+		MazeState choseeen = (MazeState)chosen;
+		if((choseeen.numCheese==3) && (maze.output().equals(choseeen.position))) {
+			return true;
+		}
+		
+		
 		return false;
 	}
 
