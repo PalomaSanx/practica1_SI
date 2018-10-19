@@ -1,19 +1,19 @@
 package algorithms;
 
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import search.*;
 
 
 
-public class BreathFirst extends SearchAlgorithm {
+public class Busqueda_Base extends SearchAlgorithm {
 
 	@Override
 	public void setParams(String[] params) {
 		// TODO Auto-generated method stub
-		int x;
-		int y;
-		
-		
+		//ANCHURA no necesita
 		
 	}
 
@@ -22,7 +22,7 @@ public class BreathFirst extends SearchAlgorithm {
 		// TODO Auto-generated method stub //debe leer el estado inicial del problema 
 		//y llevar a cabo la búsqueda
 		
-	Node node=new Node(problem.initialState());
+		Node node=new Node();
 	
 		
 		

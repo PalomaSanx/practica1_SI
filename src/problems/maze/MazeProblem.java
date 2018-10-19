@@ -61,109 +61,125 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 	@Override
 	public State initialState() {
-		// TODO Auto-generated method stub //se inicia estado x=x y=0, quesos=0 y gatos=0;
-		return new MazeState(maze.input(),0,0);
+		// TODO Auto-generated method stub //se inicia estado x=x y=0, quesos=0 y
+		// gatos=0;
+		return new MazeState(maze.input(), 0, 0);
 	}
 
 	@Override
 	public State applyAction(State state, Action action) {
-		// TODO Auto-generated method stub// devuelve el estado después de aplicar una accion 'a' a un estado 'e'.
+		// TODO Auto-generated method stub// devuelve el estado después de aplicar una
+		// accion 'a' a un estado 'e'.
 
 		MazeState mazeState = (MazeState) state;
 		MazeAction mazeAction = (MazeAction) action;
-		int x=mazeState.position.x;
-		int y=mazeState.position.y;
-		
-		if ((maze.containsCheese(mazeState.position))) {
-			mazeState.numCheese++;
-			// quitar queso de matriz
-		} else if ((maze.containsCat(mazeState.position))) {
+		int x = mazeState.posY;
+		int y = mazeState.posX;
+
+
+		if ((maze.containsCat(mazeState.position))) {
 			if (mazeState.numCat == 2) {
 				// mueres
 				return null;
 			}
 			mazeState.numCat++;
 			// aumentamos el coste x2
-		} else {
-			// nos movemos
-			switch (mazeAction) {
-			case RIGHT: if(maze.cellGraph.get(mazeState.posX).equals(x++)) {
-							x++;
-						}
-				break;
-			case LEFT:if(maze.cellGraph.get(mazeState.posX).equals(x--)) {
-				x--;
-			}
-				break;
-			case UP:if(maze.cellGraph.get(mazeState.posX).equals(y--)) {
-					y--;
-				}
-				break;
-
-			case DOWN: if(maze.cellGraph.get(mazeState.posX).equals(y++)) {
-				y++;
-				break;
-			}			
-		  }
-		}
+		} 
 		
-		if(x<0 || x>maze.size-1 || y<0 || y>maze.size-1) {
+		
+		switch (mazeAction) {
+		case EAT:
+			mazeState.numCheese++;
+			//quitar queso de laberinto
+			break;
+		case RIGHT:
+			x++;
+			break;
+		case LEFT:
+			x--;
+
+			break;
+		case UP:
+			y--;
+
+			break;
+
+		case DOWN:
+			y++;
+
+			break;
+		}
+
+		if (x < 0 || x > maze.size - 1 || y < 0 || y > maze.size - 1) {
 			return null;
 		}
-			
-			return new MazeState(x,y,mazeState.numCheese,mazeState.numCat);
-		
-		
+
+		return new MazeState(x, y, mazeState.numCheese, mazeState.numCat);
+
 	}
 
 	@Override
 	public ArrayList<Action> getPossibleActions(State state) {
 		// TODO Auto-generated method stub
-		//comprobamos si se puede realizar la accion:RIGHT
-		//comprobamos si se puede realizar la accion:LEFT
-		//comprobamos si se puede realizar la accion:UP
-		//comprobamos si se puede realizar la accion:DOWN
-		//comprobamos si se puede realizar la accion:EAT
-		MazeState mazestate = (MazeState)state;
+		// comprobamos si se puede realizar la accion:RIGHT
+		// comprobamos si se puede realizar la accion:LEFT
+		// comprobamos si se puede realizar la accion:UP
+		// comprobamos si se puede realizar la accion:DOWN
+		// comprobamos si se puede realizar la accion:EAT
+
+		MazeState mazeState = (MazeState) state;
 		ArrayList<Action> possibleActions = new ArrayList<Action>();
-		
-		Action[] acciones= {MazeAction.RIGHT,MazeAction.LEFT,MazeAction.UP,MazeAction.DOWN};
-		
-		for(Action accion: acciones) {
-			if(applyAction(mazestate, accion)!= null) {
-				possibleActions.add(accion);
-			}
+
+		int x = mazeState.position.x;
+		int y = mazeState.position.y;
+
+		int x2 = x;
+		int y2 = y;
+
+		if ((maze.containsCheese(mazeState.position))) {
+			possibleActions.add(MazeAction.EAT);
 		}
-		
-		return null;
+		if (maze.reachablePositions(x, y).equals(x2 + 1) && maze.reachablePositions(x, y).equals(y2)) {
+			possibleActions.add(MazeAction.RIGHT);
+		}
+		if (maze.reachablePositions(x, y).equals(x2 - 1) && maze.reachablePositions(x, y).equals(y2)) {
+			possibleActions.add(MazeAction.LEFT);
+		}
+		if (maze.reachablePositions(x, y).equals(x2) && maze.reachablePositions(x, y).equals(y2 - 1)) {
+			possibleActions.add(MazeAction.UP);
+		}
+		if (maze.reachablePositions(x, y).equals(x2) && maze.reachablePositions(x, y).equals(y2 + 1)) {
+			possibleActions.add(MazeAction.DOWN);
+		}
+
+		return possibleActions;
 	}
 
 	@Override
 	public double cost(State state, Action action) {
 		// TODO Auto-generated method stub //si gato=1 el coste x2.
-		
-		MazeState mazestate =(MazeState)state;
-		MazeAction mazeaction =(MazeAction)action;
-		
-		MazeState estado_nuevo =(MazeState) applyAction(mazestate, mazeaction);
-		
-		if(estado_nuevo.numCat==1) {
+
+		MazeState mazestate = (MazeState) state;
+		MazeAction mazeaction = (MazeAction) action;
+
+		MazeState estado_nuevo = (MazeState) applyAction(mazestate, mazeaction);
+
+		if (estado_nuevo.numCat == 1) {
 			return 2;
-		}		
-		
+		}
+
 		return 1;
 	}
 
 	@Override
 	public boolean testGoal(State chosen) {
 		// TODO Auto-generated method stub //¿Soy estado objetivo?
-		
-		MazeState choseeen = (MazeState)chosen;
-		if((choseeen.numCheese==3) && (maze.output().equals(choseeen.position))) {
+
+		MazeState choseeen = (MazeState) chosen;
+		if ((choseeen.numCheese == 3) && (maze.output().equals(choseeen.position))) {
 			return true;
 		}
-		
-		
+
 		return false;
 	}
 
