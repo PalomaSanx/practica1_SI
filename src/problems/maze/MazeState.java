@@ -13,10 +13,10 @@ public class MazeState extends State implements Cloneable{
 	
 	/** An state is includes a position given by the coordinates (x,y) */
 	public Position position;
-	public int numCheese=0;
-	public int numCat=0;
-	public int posX=position.x;
-	public int posY=position.y;
+	public int numCheese;
+	public int numCat;
+	protected int posX;
+	protected int posY;
 	
 	
 	//(X,Y,Q,G)
@@ -25,20 +25,30 @@ public class MazeState extends State implements Cloneable{
 		this.numCheese=numCheese;
 		this.posX=x;
 		this.posY=y;
+		this.position=new Position(x,y);
+
+	}
+	public MazeState(Position pos, int numCheese, int numCat) {
+		this.numCat=numCat;
+		this.numCheese=numCheese;
+		this.posX=pos.x;
+		this.posY=pos.y;
+		this.position=pos;
+
 	}
 	//
-	public MazeState(int x,int y) {
+	public MazeState(int x, int y) {
+		this.numCat=0;
+		this.numCheese=0;
 		this.posX=x;
-		this.posY=y;	
+		this.posY=y;
+		this.position=new Position(x,y);
+	
 	}
 	
+	
 	//
-	public MazeState(Position pos,int numCheese,int numCat) {
-		// TODO Auto-generated constructor stub
-		this.position=pos;
-		this.numCheese=numCheese;
-		this.numCat=numCat;
-	}
+
 	
 	public int getX() {
 		return this.posX;
@@ -48,9 +58,7 @@ public class MazeState extends State implements Cloneable{
 		return this.posY;
 	}
 	
-	public Position getPos() {
-		return this.position;
-	}
+	
 	
 	
 	

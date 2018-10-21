@@ -63,7 +63,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	public State initialState() {
 		// TODO Auto-generated method stub //se inicia estado x=x y=0, quesos=0 y
 		// gatos=0;
-		return new MazeState(maze.input(), 0, 0);
+		return new MazeState(maze.input(),0, 0);
 	}
 
 	@Override
@@ -73,18 +73,9 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 		MazeState mazeState = (MazeState) state;
 		MazeAction mazeAction = (MazeAction) action;
-		int x = mazeState.posY;
-		int y = mazeState.posX;
+		int x = mazeState.posX;
+		int y = mazeState.posY;
 
-
-		if ((maze.containsCat(mazeState.position))) {
-			if (mazeState.numCat == 2) {
-				// mueres
-				return null;
-			}
-			mazeState.numCat++;
-			// aumentamos el coste x2
-		} 
 		
 		
 		switch (mazeAction) {
@@ -109,8 +100,16 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 			break;
 		}
+		if ((maze.containsCat(mazeState.position))) {
+			if (mazeState.numCat == 2) {
+				// mueres
+				return null;
+			}
+			mazeState.numCat++;
+			// aumentamos el coste x2
+		} 
 
-		if (x < 0 || x > maze.size - 1 || y < 0 || y > maze.size - 1) {
+		else if (x < 0 || x > maze.size - 1 || y < 0 || y > maze.size - 1) {
 			return null;
 		}
 
@@ -139,16 +138,16 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		if ((maze.containsCheese(mazeState.position))) {
 			possibleActions.add(MazeAction.EAT);
 		}
-		if (maze.reachablePositions(x, y).equals(x2 + 1) && maze.reachablePositions(x, y).equals(y2)) {
+		else if (maze.reachablePositions(x, y).equals(x2 + 1) && maze.reachablePositions(x, y).equals(y2)) {
 			possibleActions.add(MazeAction.RIGHT);
 		}
-		if (maze.reachablePositions(x, y).equals(x2 - 1) && maze.reachablePositions(x, y).equals(y2)) {
+		else if (maze.reachablePositions(x, y).equals(x2 - 1) && maze.reachablePositions(x, y).equals(y2)) {
 			possibleActions.add(MazeAction.LEFT);
 		}
-		if (maze.reachablePositions(x, y).equals(x2) && maze.reachablePositions(x, y).equals(y2 - 1)) {
+		else if (maze.reachablePositions(x, y).equals(x2) && maze.reachablePositions(x, y).equals(y2 - 1)) {
 			possibleActions.add(MazeAction.UP);
 		}
-		if (maze.reachablePositions(x, y).equals(x2) && maze.reachablePositions(x, y).equals(y2 + 1)) {
+		else if (maze.reachablePositions(x, y).equals(x2) && maze.reachablePositions(x, y).equals(y2 + 1)) {
 			possibleActions.add(MazeAction.DOWN);
 		}
 
@@ -181,6 +180,8 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		}
 
 		return false;
+		
+		
 	}
 
 	@Override
