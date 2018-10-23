@@ -82,7 +82,7 @@ public class Node{
 	public boolean equals(Object anotherNode){
 		// If the object is not a Node, returns false, but reports the error.
 		if (!(anotherNode instanceof Node)){
-			System.out.println("Trying to compare two objects of different classes.");
+			System.out.println("Estas comparando dos objetos de distinta clase.\"");
 			return false;
 		}
 		// If the object is a node, compares their states.

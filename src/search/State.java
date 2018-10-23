@@ -6,6 +6,8 @@ package search;
  */
 public abstract class State {
 	
+	
+	
 	/** 
 	 * Checks if two states are similar. The method overrides the one provided by the Object class
 	 * and is used by some classes in Java. For instance, the method HashSet.contains makes

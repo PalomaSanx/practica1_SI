@@ -43,7 +43,7 @@ public class Position{
 		// If the object passed as parameter is not a position, 
 		// returns false and reports an error
 		if (!(anotherPosition instanceof Position)){
-			System.out.println("Trying to compare two objects of different classes.");
+			System.out.println("Estas comparando dos objetos de distinta clase.");
 			return false;
 		}
 		// If the two objects have the same class, compares x and y.

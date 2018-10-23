@@ -15,8 +15,8 @@ public class MazeState extends State implements Cloneable{
 	public Position position;
 	public int numCheese;
 	public int numCat;
-	protected int posX;
-	protected int posY;
+	public int posX;
+	public int posY;
 	
 	
 	//(X,Y,Q,G)
@@ -38,8 +38,7 @@ public class MazeState extends State implements Cloneable{
 	}
 	//
 	public MazeState(int x, int y) {
-		this.numCat=0;
-		this.numCheese=0;
+		super();
 		this.posX=x;
 		this.posY=y;
 		this.position=new Position(x,y);
