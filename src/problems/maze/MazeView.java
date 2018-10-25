@@ -19,7 +19,7 @@ import visualization.ProblemView;
 import search.Action;
 import search.State;
 import utils.Position;
-
+import problems.maze.*;
 /** Shows a maze */
 public class MazeView extends ProblemView {
 
@@ -176,7 +176,7 @@ public class MazeView extends ProblemView {
 		graphics2D.drawImage(mazeImage, 0, 0, this);
 
 		Position posFigurePx;
-
+		
 		// Paints the hamster
 		if (currentState != null) {
 			// ******************
@@ -188,7 +188,7 @@ public class MazeView extends ProblemView {
 			// graphics2D.drawImage(scaledHamster2, posHamsterPx.x, posHamsterPx.y, this);
 			//
 			// ******************
-			if (!(mazeProblem.maze.numCats == 0)) {
+			if (currentState.numCat==0) {
 				graphics2D.drawImage(scaledHamster, posHamsterPx.x, posHamsterPx.y, this);
 			} else {
 				graphics2D.drawImage(scaledHamster2, posHamsterPx.x, posHamsterPx.y, this);
@@ -216,14 +216,12 @@ public class MazeView extends ProblemView {
 		//
 		// ******************
 		for (Position cheesePosition : mazeProblem.maze.cheesePositions) {
-			for (Position cheeseHam : mazeProblem.quesosComidos) {
-				if (!(cheesePosition.equals(cheeseHam))) {
+			if(!(currentState.quesosComidos.contains(cheesePosition))) {
 					posFigurePx = posImageToPx(cheesePosition);
 					graphics2D.drawImage(scaledCheese, posFigurePx.x, posFigurePx.y, this);
 				}
 
 			}
-		}
 	}
 
 	/** Considers reachable cells to paint each cell */

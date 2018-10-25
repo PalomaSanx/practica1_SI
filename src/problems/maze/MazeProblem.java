@@ -27,7 +27,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	// Penalty factor for fight with the cat.
 	private static final double PENALTY = 2;
 	
-	ArrayList<Position>quesosComidos = new ArrayList<>();
+	
 
 	/* Maze */
 	Maze maze;
@@ -70,7 +70,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	public State initialState() {
 		// TODO Auto-generated method stub //se inicia estado x=x y=0, quesos=0 y
 		// gatos=0;
-		return new MazeState(maze.input(), 0, 0);
+		return new MazeState(maze.inputX,0,0);
 	}
 
 	@Override
@@ -80,14 +80,16 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 		MazeState mazeState = (MazeState) state;
 		MazeAction mazeAction = (MazeAction) action;
-		int x = mazeState.posX;
-		int y = mazeState.posY;
+		int x = mazeState.getX();
+		int y = mazeState.getY();
+		
 	
 		switch (mazeAction) {
 		case EAT:
-			mazeState.numCheese++;
-			quesosComidos.add(mazeState.position);
-					
+			
+			mazeState.quesosComidos.add(mazeState.position);
+			
+			//maze.cheesePositions.remove(mazeState.position);
 			// quitar queso de laberinto
 			break;
 		case RIGHT:
@@ -117,8 +119,9 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		if ((x < 0 || x > maze.size - 1 || y < 0 || y > maze.size - 1)) {
 			return null;
 		}
+		
 
-		return new MazeState(x, y, mazeState.numCheese, mazeState.numCat);
+		return new MazeState(x,y,mazeState.quesosComidos ,mazeState.numCat);
 
 	}
 
@@ -127,13 +130,14 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		// TODO Auto-generated method stub
 
 		MazeState mazeState = (MazeState) state;
-		int x = mazeState.position.x;
-		int y = mazeState.posY;
-		int a=0;
+		int x = mazeState.getX();
+		int y = mazeState.getY();
+		
 
 		ArrayList<Action> possibleActions = new ArrayList<Action>();
 	
 		Set<Position> rechp = maze.reachablePositions(mazeState.position);
+		
 		ArrayList<Action>catAc = new ArrayList<Action>();
 		
 		if ((maze.containsCat(mazeState.position))) {
@@ -144,10 +148,10 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		}
 		
 		
-		if (maze.containsCheese(mazeState.position) ) {
-			
-					possibleActions.add(MazeAction.EAT);
-					quesosComidos.add(mazeState.position);					
+		if (maze.containsCheese(mazeState.position)  ) {		
+			if(!(mazeState.quesosComidos.contains(mazeState.position))){
+				possibleActions.add(MazeAction.EAT);
+			}				
 		}		
 
 		for (Position pos : rechp) {
@@ -171,8 +175,6 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 			}
 		}
 
-	
-
 		return possibleActions;
 	}
 
@@ -194,7 +196,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 		MazeState choseeen = (MazeState) chosen;
 
-		if ((choseeen.numCheese == 3) && (choseeen.position.x==maze.outputX && choseeen.position.y==maze.size-1)) {
+		if ((choseeen.quesosComidos.size() == NUM_CHEESES) && (choseeen.position.x==maze.outputX && choseeen.position.y==maze.size-1)) {
 			return true;
 		}
 
