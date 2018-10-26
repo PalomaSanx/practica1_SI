@@ -65,8 +65,9 @@ public class MazeState extends State implements Cloneable {
 		}
 
 		// comparamos posiciones(x,y) para el objeto pasado como parámetro.
-		if ((numCat == ((MazeState) anotherState).numCat)&& (this.position.equals(((MazeState) anotherState).position))) {
-			for (Position QuesosComidosAnother: (((MazeState) anotherState).quesosComidos)) {
+		if ((this.numCat == ((MazeState) anotherState).numCat)
+				&& (((MazeState) anotherState).position.equals(this.position))) {
+			for (Position QuesosComidosAnother : (((MazeState) anotherState).quesosComidos)) {
 				if (!(this.quesosComidos.contains(QuesosComidosAnother))) {
 					return false;
 				}

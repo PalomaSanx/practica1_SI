@@ -27,6 +27,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	// Penalty factor for fight with the cat.
 	private static final double PENALTY = 2;
 	
+	//numQ=0;
 	
 
 	/* Maze */
@@ -80,6 +81,9 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 		MazeState mazeState = (MazeState) state;
 		MazeAction mazeAction = (MazeAction) action;
+		HashSet<Position> quesoscomidosclon = (HashSet<Position>) mazeState.quesosComidos.clone();
+	
+	
 		int x = mazeState.getX();
 		int y = mazeState.getY();
 		
@@ -87,7 +91,8 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		switch (mazeAction) {
 		case EAT:
 			
-			mazeState.quesosComidos.add(mazeState.position);
+			quesoscomidosclon.add(mazeState.position);
+			
 			
 			//maze.cheesePositions.remove(mazeState.position);
 			// quitar queso de laberinto
@@ -119,9 +124,8 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		if ((x < 0 || x > maze.size - 1 || y < 0 || y > maze.size - 1)) {
 			return null;
 		}
-		
 
-		return new MazeState(x,y,mazeState.quesosComidos ,mazeState.numCat);
+		return new MazeState(x,y,quesoscomidosclon ,mazeState.numCat);
 
 	}
 
@@ -151,6 +155,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		if (maze.containsCheese(mazeState.position)  ) {		
 			if(!(mazeState.quesosComidos.contains(mazeState.position))){
 				possibleActions.add(MazeAction.EAT);
+				//this.numQ++;
 			}				
 		}		
 

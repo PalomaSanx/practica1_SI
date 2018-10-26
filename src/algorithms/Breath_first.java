@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
+import problems.maze.MazeState;
 import search.*;
 
 public class Breath_first extends SearchAlgorithm {
@@ -50,11 +51,11 @@ public class Breath_first extends SearchAlgorithm {
 			
 			
 			node = extract(frontier);
-			
+			//System.out.println(((MazeState)node.getState()));
 			
 			
 			if (!(explored.contains(node.getState()))) {
-
+				
 				
 				if (problem.testGoal(node.getState())) {
 
