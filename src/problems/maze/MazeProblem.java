@@ -95,21 +95,21 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 			break;
 		case RIGHT:
 			x++;
-			if (maze.containsCat(mazeState.position)) {
+			if (maze.containsCat(x,y)) {
 				return new MazeState(x, y, quesoscomidosclon, mazeState.numCat++, q);
 			}
 
 			break;
 		case LEFT:
 			x--;
-			if (maze.containsCat(mazeState.position)) {
+			if (maze.containsCat(x,y)) {
 				return new MazeState(x, y, quesoscomidosclon, mazeState.numCat++, q);
 			}
 
 			break;
 		case UP:
 			y--;
-			if (maze.containsCat(mazeState.position)) {
+			if (maze.containsCat(x,y)) {
 				return new MazeState(x, y, quesoscomidosclon, mazeState.numCat++, q);
 			}
 
@@ -117,15 +117,15 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 		case DOWN:
 			y++;
-			if (maze.containsCat(mazeState.position)) {
+			if (maze.containsCat(x,y)) {
 				return new MazeState(x, y, quesoscomidosclon, mazeState.numCat++, q);
 			}
 
 			break;
 		}
-		if ((x < 0 || x > maze.size - 1 || y < 0 || y > maze.size - 1)) {
-			return null;
-		}
+//		if ((x < 0 || x > maze.size - 1 || y < 0 || y > maze.size - 1)) {
+//			return null;
+//		}
 
 		return new MazeState(x, y, quesoscomidosclon, mazeState.numCat, q);
 
@@ -152,7 +152,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 			}
 		}
 
-		if (maze.containsCat(mazeState.position)&&(mazeState.numCat == PENALTY)) {
+		if (maze.containsCat(mazeState.position)&&(mazeState.numCat >= PENALTY)) {
 				System.out.println("MUERES AQUI");
 
 		} else {
