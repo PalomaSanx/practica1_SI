@@ -18,6 +18,7 @@ public class MazeState extends State implements Cloneable {
 	public Position position;
 	public int numCat = 0;
 	HashSet<Position> quesosComidos = new HashSet<>();
+	public int numQuesos= quesosComidos.size();
 
 	public MazeState(Position position) {
 		this.position = position;
@@ -35,10 +36,11 @@ public class MazeState extends State implements Cloneable {
 	}
 
 	//
-	public MazeState(int x, int y, HashSet<Position> quesosComidos, int numCat) {
+	public MazeState(int x, int y, HashSet<Position> quesosComidos, int numCat, int numQuesos) {
 		this.position = new Position(x, y);
 		this.numCat = numCat;
 		this.quesosComidos = quesosComidos;
+		this.numQuesos=numQuesos;
 
 	}
 
@@ -65,18 +67,26 @@ public class MazeState extends State implements Cloneable {
 		}
 
 		// comparamos posiciones(x,y) para el objeto pasado como parámetro.
-		if ((this.numCat == ((MazeState) anotherState).numCat)
-				&& (((MazeState) anotherState).position.equals(this.position))) {
-			for (Position QuesosComidosAnother : (((MazeState) anotherState).quesosComidos)) {
-				if (!(this.quesosComidos.contains(QuesosComidosAnother))) {
-					return false;
-				}
-			}
+//		if ((this.numCat == ((MazeState) anotherState).numCat)
+//				&& (((MazeState) anotherState).position.equals(this.position))) {
+//			for (Position QuesosComidosAnother : (((MazeState) anotherState).quesosComidos)) {
+//				if (!(this.quesosComidos.contains(QuesosComidosAnother))) {
+//					return false;
+//				}
+//			}
+//			return true;
+//
+//		}
+//
+//		return false;
+		
+		if(this.quesosComidos.size() == ((MazeState)anotherState).quesosComidos.size() && 
+				((MazeState) anotherState).position.equals(this.position)
+				&& (this.numCat == ((MazeState) anotherState).numCat)) {
 			return true;
-
 		}
-
 		return false;
+		
 	}
 
 	@Override

@@ -23,20 +23,21 @@ public class Breath_first extends SearchAlgorithm {
 	public void doSearch() {
 		// TODO Auto-generated method stub //debe leer el estado inicial del problema
 		// y llevar a cabo la búsqueda
-		
-		//HashSet para almacenar los nodos explorados.
+
+		// HashSet para almacenar los nodos explorados.
 		HashSet<State> explored = new HashSet<State>();
-		
-		//ArrayList para almacenar los sucesores
+
+		// ArrayList para almacenar los sucesores
 		ArrayList<Node> successors = new ArrayList<Node>();
-		//dependerá del algoritmo a tratar.
+
+		// dependerá del algoritmo a tratar.
 		Collection<Node> frontier;
-		//límite de profundidad
+
+		// límite de profundidad
 		int limit = Integer.MAX_VALUE;
 		//
-		//secuencia de acciones
+		// secuencia de acciones
 		this.actionSequence = new ArrayList<Action>();
-
 		this.totalCost = 0;
 		this.expandedNodes = 0;
 		this.searchTime = System.currentTimeMillis();
@@ -45,48 +46,38 @@ public class Breath_first extends SearchAlgorithm {
 
 		frontier = createFrontier();
 		frontier.add(node);
-		
-		
-		while (!(frontier.isEmpty()) ) {
-			
-			
+
+		while (!(frontier.isEmpty())) {
+
 			node = extract(frontier);
-			//System.out.println(((MazeState)node.getState()));
-			
-			
+			// System.out.println(((MazeState)node.getState()));
+
 			if (!(explored.contains(node.getState()))) {
-				
-				
+
 				if (problem.testGoal(node.getState())) {
 
-					
 					totalCost = node.getCost();
-					
-					
+
 					actionSequence = recuperarRuta(node);
 					break;
 				}
 
 				else {
-					
-					
+
 					if (node.getDepth() < limit) {
 
-					
 						successors = getSuccessors(node);
 
-					
 						for (Node n : successors) {
 
 							insert(n, frontier);
 						}
 
-					
 						explored.add(node.getState());
 					}
 				}
 			}
-			
+
 		}
 
 		searchTime = System.currentTimeMillis() - searchTime;
@@ -117,22 +108,22 @@ public class Breath_first extends SearchAlgorithm {
 	}
 
 	public Collection<Node> createFrontier() {
-        
-        return new LinkedList<Node>();
-    }
+
+		return new LinkedList<Node>();
+	}
 
 	/* Extract the first element from the priority queue */
 
-	  public Node extract(Collection<Node> frontier) {
-	        
-	        return (((LinkedList<Node>) frontier).remove());
-	    }
+	public Node extract(Collection<Node> frontier) {
+
+		return (((LinkedList<Node>) frontier).remove());
+	}
 
 	/* Insert an into the priority queue */
 
-	   public void insert(Node n, Collection<Node> frontier) {
-	        
-	        ((LinkedList<Node>) frontier).add(n);
-	    }
+	public void insert(Node n, Collection<Node> frontier) {
+
+		((LinkedList<Node>) frontier).add(n);
+	}
 
 }

@@ -4,8 +4,10 @@ import javax.swing.JFrame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import search.State;
+import utils.Position;
 import search.Action;
 import search.SearchProblem;
 
@@ -83,7 +85,7 @@ public class ProblemVisualization{
 	public static void main(String[] args) {
 		// Uses an instance of MazeProblem as example
 		problems.maze.MazeProblem problem = new problems.maze.MazeProblem(10, 0, 4);
-		problems.maze.MazeState initialState = new problems.maze.MazeState(5,3);
+		problems.maze.MazeState initialState = new problems.maze.MazeState(5,3, new HashSet<Position>(), 0, 0);
 		ArrayList<Action> actions = new ArrayList<Action>();
 		actions.add(problems.maze.MazeAction.RIGHT);
 		actions.add(problems.maze.MazeAction.RIGHT);
