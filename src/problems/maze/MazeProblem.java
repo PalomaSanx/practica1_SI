@@ -223,6 +223,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	public double heuristic(State state) {
 		// TODO Auto-generated method stub
 		
+		//h1=es la heuristica de encontrar el primer queso y irse a la salida.
 		MazeState mazeState = (MazeState)state;
 		HashSet<Position> posicionesQueso = (HashSet) maze.cheesePositions;
 		ArrayList<Integer> sol =new ArrayList<>();
@@ -236,11 +237,8 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		 x++;
 		}
 
-		int minValue = (Collections.min(sol));
+		int minValue = (Collections.min(sol))+(Math.abs(mazeState.position.x-maze.outputX)+Math.abs(mazeState.position.y-maze.size-1));
 		
-		
-		System.out.println("Valor distancia minima: "+minValue);
-
 		return minValue;
 	
 	}
