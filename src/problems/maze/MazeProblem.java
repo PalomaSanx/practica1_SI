@@ -49,6 +49,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		int size = this.maze.size;
 		int seed = this.maze.seed;
 		int cats = this.maze.numCats;
+		
 
 		if (args.length == 3)
 			try {
@@ -205,12 +206,6 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 		MazeState state = (MazeState) chosen;
 
-//		if ((choseeen.quesosComidos.size() == NUM_CHEESES)
-//				&& (choseeen.position.x == maze.outputX && choseeen.position.y == maze.size - 1)) {
-//			return true;
-//		}
-//
-//		return false;
 
 		if (state.position.equals(maze.output()) && state.numQ == NUM_CHEESES && state.numCat<=1) {
 			return true;
@@ -227,7 +222,11 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		MazeState mazeState = (MazeState)state;
 		HashSet<Position> posicionesQueso = (HashSet) maze.cheesePositions;
 		ArrayList<Integer> sol =new ArrayList<>();
+		int minValue=0;
+		int heuristica = 1;
 		
+		if(heuristica==1) {
+
 		int x=0;
 		
 		for(Position pos: posicionesQueso) {
@@ -237,7 +236,18 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		 x++;
 		}
 
-		int minValue = (Collections.min(sol))+(Math.abs(mazeState.position.x-maze.outputX)+Math.abs(mazeState.position.y-maze.size-1));
+		minValue = (Collections.min(sol))+(Math.abs(mazeState.position.x-maze.outputX)+Math.abs(mazeState.position.y-maze.size-1));
+		
+		return minValue;
+		}
+		if(heuristica==2) {
+		//h2= distancia de manhattan (distancia desde state a Finalstate.
+			
+			minValue = (Math.abs(mazeState.position.x-maze.outputX)+Math.abs(mazeState.position.y-maze.size-1));
+			
+		return minValue;	
+		}
+		
 		
 		return minValue;
 	

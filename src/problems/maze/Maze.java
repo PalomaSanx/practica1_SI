@@ -27,6 +27,7 @@ public class Maze implements Cloneable{
 	protected final int numCheeses;
 	/* Probability of introducing an aditional links */
     protected final double probAddLinks = 0.15;
+
     
     // MAZE. 
 
@@ -63,6 +64,7 @@ public class Maze implements Cloneable{
 		this.seed = seed;
 		this.numCats = numCats;
 		this.numCheeses = numCheeses;
+		
 		generate(seed);
 	}
 	
