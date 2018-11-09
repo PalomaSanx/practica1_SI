@@ -27,6 +27,8 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	private static final int NUM_CHEESES = 3;
 	// Penalty factor for fight with the cat.
 	private static final double PENALTY = 2;
+	
+	public static String heuristica = null;
 
 	// numQ=0;
 
@@ -51,11 +53,12 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		int cats = this.maze.numCats;
 		
 
-		if (args.length == 3)
+		if (args.length == 4)
 			try {
 				size = Integer.parseInt(args[0]);
 				cats = Integer.parseInt(args[1]);
 				seed = Integer.parseInt(args[2]);
+				heuristica = (args[3]);
 			} catch (Exception e) {
 				System.out.println("Parameters for MazeProblem are incorrect.");
 				return;
@@ -223,9 +226,9 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		HashSet<Position> posicionesQueso = (HashSet) maze.cheesePositions;
 		ArrayList<Integer> sol =new ArrayList<>();
 		int minValue=0;
-		int heuristica = 1;
 		
-		if(heuristica==1) {
+		System.out.println(heuristica);
+		if(this.heuristica=="h1") {
 
 		int x=0;
 		
@@ -240,7 +243,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		
 		return minValue;
 		}
-		if(heuristica==2) {
+		if(this.heuristica=="h2") {
 		//h2= distancia de manhattan (distancia desde state a Finalstate.
 			
 			minValue = (Math.abs(mazeState.position.x-maze.outputX)+Math.abs(mazeState.position.y-maze.size-1));
