@@ -10,12 +10,19 @@ import java.util.PriorityQueue;
 import problems.maze.MazeState;
 import search.*;
 
+//ESTA CLASE IMPLEMENTA EL ALGORITMO DE BÚSQUEDA POR ANCHURA, SERÁ LA BASE PARA EL RESTO DE ALGORITMOS.
 public class Breath_first extends SearchAlgorithm {
+
+	int limit_heurist = 0;
 
 	@Override
 	public void setParams(String[] params) {
 		// TODO Auto-generated method stub
 		// ANCHURA no necesita
+
+		String[] s = params;
+		this.limit_heurist = Integer.parseInt(params[0]);
+		System.out.println("Limite_o_heuristica: " + limit_heurist);
 
 	}
 
@@ -26,32 +33,34 @@ public class Breath_first extends SearchAlgorithm {
 
 		// HashSet para almacenar los nodos explorados.
 		HashSet<State> explored = new HashSet<State>();
-
 		// ArrayList para almacenar los sucesores
 		ArrayList<Node> successors = new ArrayList<Node>();
-
 		// dependerá del algoritmo a tratar.
 		Collection<Node> frontier;
-
-		// límite de profundidad
-		int limit = Integer.MAX_VALUE;
-		//
-		// secuencia de acciones
-		this.actionSequence = new ArrayList<Action>();
-		this.totalCost = 0;
-		this.expandedNodes = 0;
-		this.searchTime = System.currentTimeMillis();
-
+		// inicio la busqueda
+		this.initSearch();
+		// se crea nodo que representa la inicializacion del estado
 		Node node = new Node(this.problem.initialState());
-
+		// se crea la frontera
 		frontier = createFrontier();
+		// se añade el nodo inicial creado a la frontera.
 		frontier.add(node);
 
-		while (!(frontier.isEmpty())) {
-
+		int limit = 0;
+		// aqui se comprueba si se esta metiendo un límite por parametro, si es así, se
+		// añadirá dicho limite
+		if (this.limit_heurist != 0) {
+			limit = this.limit_heurist;
+		} else { // sino, se establece un valor infinito para que se pueda realizar la búsqueda
+			limit = Integer.MAX_VALUE;
+		}
+		while (!(frontier.isEmpty())) { // si la frontera no esta vacia se extrae un nodo, si no se habia explorado
+										// antes, se comprueba si es la solucion final (se obtendría el coste, la secuencia de acciones 
+										// y estabelcemos que es solucion.
+										//sino es solucion: vemos que la profundida del nodo < limite (esto para el caso de algoritmo de profundidad limitada).
+										// obtenemos los sucesores, y para cada sucesor lo insertamos en la frontera y añadimos a explorados.
 			node = extract(frontier);
-			// System.out.println(((MazeState)node.getState()));
-
+			
 			if (!(explored.contains(node.getState()))) {
 
 				if (problem.testGoal(node.getState())) {
@@ -59,6 +68,8 @@ public class Breath_first extends SearchAlgorithm {
 					totalCost = node.getCost();
 
 					actionSequence = recuperarRuta(node);
+
+					solutionFound = true;
 					break;
 				}
 
@@ -78,26 +89,26 @@ public class Breath_first extends SearchAlgorithm {
 				}
 			}
 
+			if (frontier.size() > this.openMaxSize) {
+				this.openMaxSize = frontier.size();
+			}
+			if (explored.size() > this.exploredMaxSize) {
+				this.exploredMaxSize = explored.size();
+			}
+
 		}
 
-		searchTime = System.currentTimeMillis() - searchTime;
-
 		Collections.reverse(actionSequence);
-
-		// si es nodo objetivo-> guardamos en Action[] actionSequence
-
-		// método gestiona lista abiertos
-
-		// método gestiona lista cerrados
 
 	}
 
 	public ArrayList<Action> recuperarRuta(Node n) {
 
-		// Creates a new sequence of actions to be returned
+		// Crea una nueva secuencia de acciones para retornala.
 		ArrayList<Action> path = new ArrayList<Action>();
 
 		// Recover the path in a reverse order and calculate cost
+		//recorre el camino en orden inverso y calcula el coste.
 		while (!(n.getState().equals(problem.initialState()))) {
 
 			path.add(n.getAction());
@@ -106,20 +117,21 @@ public class Breath_first extends SearchAlgorithm {
 
 		return path;
 	}
-
+	
+	//Para retornar un LinkedList con la frontera.
 	public Collection<Node> createFrontier() {
 
 		return new LinkedList<Node>();
 	}
 
-	/* Extract the first element from the priority queue */
+	//Retornar un nodo extraido de la frontera.
 
 	public Node extract(Collection<Node> frontier) {
 
 		return (((LinkedList<Node>) frontier).remove());
 	}
 
-	/* Insert an into the priority queue */
+	//Añade un nodo en la frontera.
 
 	public void insert(Node n, Collection<Node> frontier) {
 

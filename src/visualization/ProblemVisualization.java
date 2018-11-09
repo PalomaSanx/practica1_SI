@@ -85,7 +85,7 @@ public class ProblemVisualization{
 	public static void main(String[] args) {
 		// Uses an instance of MazeProblem as example
 		problems.maze.MazeProblem problem = new problems.maze.MazeProblem(10, 0, 4);
-		problems.maze.MazeState initialState = new problems.maze.MazeState(5,3, new HashSet<Position>(), 0, 0);
+		problems.maze.MazeState initialState = new problems.maze.MazeState(5,3, new HashSet<Position>(), 0);
 		ArrayList<Action> actions = new ArrayList<Action>();
 		actions.add(problems.maze.MazeAction.RIGHT);
 		actions.add(problems.maze.MazeAction.RIGHT);

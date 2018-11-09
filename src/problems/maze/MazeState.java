@@ -16,45 +16,45 @@ public class MazeState extends State implements Cloneable {
 
 	/** An state is includes a position given by the coordinates (x,y) */
 	public Position position;
-	public int numCat = 0;
-	HashSet<Position> quesosComidos = new HashSet<>();
-	public int numQuesos= quesosComidos.size();
+	public int numCat;
+	public int numQ;
+	HashSet<Position> quesosComidos;
+	private Object hashQue;
+	int daño=0;
 
 	public MazeState(Position position) {
 		this.position = position;
+		this.quesosComidos = new HashSet<>();
+		this.numCat = 0;
+		this.numQ = 0;
 
 	}
 
 	public MazeState(int x, int y) {
 		this.position = new Position(x, y);
-
-	}
-
-	public MazeState(int x, int y, int numCat) {
-		this.position = new Position(x, y);
-		this.numCat = numCat;
+		this.quesosComidos = new HashSet<>();
+		this.numCat = 0;
+		this.numQ = 0;
 	}
 
 	//
-	public MazeState(int x, int y, HashSet<Position> quesosComidos, int numCat, int numQuesos) {
+	public MazeState(Position pos, HashSet<Position> quesosComidos, int numCat) {
+		this.position = pos;
+		this.numCat = numCat;
+		this.quesosComidos = quesosComidos;
+		this.numQ = quesosComidos.size();
+
+	}
+
+	public MazeState(int x, int y, HashSet<Position> quesosComidos, int numCat) {
 		this.position = new Position(x, y);
 		this.numCat = numCat;
 		this.quesosComidos = quesosComidos;
-		this.numQuesos=numQuesos;
+		this.numQ = this.quesosComidos.size();
 
 	}
 
-	// (X,Y,G)
 
-	//
-
-	public int getX() {
-		return this.position.x;
-	}
-
-	public int getY() {
-		return this.position.y;
-	}
 
 	@Override
 	public boolean equals(Object anotherState) {
@@ -66,34 +66,37 @@ public class MazeState extends State implements Cloneable {
 			return false;
 		}
 
-		// comparamos posiciones(x,y) para el objeto pasado como parámetro.
-//		if ((this.numCat == ((MazeState) anotherState).numCat)
-//				&& (((MazeState) anotherState).position.equals(this.position))) {
-//			for (Position QuesosComidosAnother : (((MazeState) anotherState).quesosComidos)) {
-//				if (!(this.quesosComidos.contains(QuesosComidosAnother))) {
-//					return false;
-//				}
-//			}
-//			return true;
-//
-//		}
 //
 //		return false;
-		
-		if(this.quesosComidos.size() == ((MazeState)anotherState).quesosComidos.size() && 
-				((MazeState) anotherState).position.equals(this.position)
-				&& (this.numCat == ((MazeState) anotherState).numCat)) {
+//		
+//		if(this.quesosComidos.size() == ((MazeState)anotherState).quesosComidos.size() && 
+//				((MazeState) anotherState).position.equals(this.position)
+//				&& (this.numCat == ((MazeState) anotherState).numCat)) {
+//			return true;
+//		}
+//		return false;
+
+		MazeState mazeAnother = (MazeState) anotherState;
+
+		if (this.quesosComidos.equals(mazeAnother.quesosComidos) && this.position.equals(mazeAnother.position)
+				&& this.numCat == mazeAnother.numCat) {
 			return true;
 		}
+
 		return false;
-		
+
 	}
 
 	@Override
 	public int hashCode() {
 		// TODO Auto-generated method stub //comparar objetos de una forma más rápida en
 		// estructuras Hash.
-		return Objects.hash(this.position, this.numCat);
+		int hashQue = 0;
+		for (Position pos : this.quesosComidos) {
+			hashQue += pos.x + 3 * 5 + pos.y + 2 * 3;
+		}
+
+		return Objects.hash(this.position.hashCode(), this.numCat, this.numQ, this.hashQue);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package problems.maze;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -70,7 +71,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	public State initialState() {
 		// TODO Auto-generated method stub //se inicia estado x=x y=0, quesos=0 y
 		// gatos=0;
-		return new MazeState(maze.inputX, 0, new HashSet<Position>(), 0, 0);
+		return new MazeState(maze.input());
 	}
 
 	@Override
@@ -80,46 +81,48 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 		MazeState mazeState = (MazeState) state;
 		MazeAction mazeAction = (MazeAction) action;
-		HashSet<Position> quesoscomidosclon = (HashSet) mazeState.quesosComidos.clone();
+		HashSet<Position> quesoscomidosclon = new HashSet<>();
+		quesoscomidosclon.addAll(mazeState.quesosComidos);
 
-		int x = mazeState.getX();
-		int y = mazeState.getY();
-		int q = mazeState.numQuesos;
+		int x = mazeState.position.x;
+		int y = mazeState.position.y;
+		int numCat = mazeState.numCat;
+		
+		
+		
+		if (maze.containsCat(mazeState.position)) {
+			numCat++;
+		}
 
 		switch (mazeAction) {
 		case EAT:
 
 			quesoscomidosclon.add(mazeState.position);
-			q = q++;
 
 			break;
 		case RIGHT:
+			
+			
+
 			x++;
-			if (maze.containsCat(x,y)) {
-				return new MazeState(x, y, quesoscomidosclon, mazeState.numCat++, q);
-			}
+
 
 			break;
 		case LEFT:
+
 			x--;
-			if (maze.containsCat(x,y)) {
-				return new MazeState(x, y, quesoscomidosclon, mazeState.numCat++, q);
-			}
+
 
 			break;
 		case UP:
+
 			y--;
-			if (maze.containsCat(x,y)) {
-				return new MazeState(x, y, quesoscomidosclon, mazeState.numCat++, q);
-			}
+
 
 			break;
-
 		case DOWN:
+
 			y++;
-			if (maze.containsCat(x,y)) {
-				return new MazeState(x, y, quesoscomidosclon, mazeState.numCat++, q);
-			}
 
 			break;
 		}
@@ -127,7 +130,9 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 //			return null;
 //		}
 
-		return new MazeState(x, y, quesoscomidosclon, mazeState.numCat, q);
+
+
+		return new MazeState(x, y, quesoscomidosclon, numCat);
 
 	}
 
@@ -136,14 +141,19 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		// TODO Auto-generated method stub
 
 		MazeState mazeState = (MazeState) state;
-		int x = mazeState.getX();
-		int y = mazeState.getY();
+		int x = mazeState.position.x;
+		int y = mazeState.position.y;
 
 		ArrayList<Action> possibleActions = new ArrayList<Action>();
 
 		Set<Position> rechp = maze.reachablePositions(mazeState.position);
 
 		// ArrayList<Action>catAc = new ArrayList<Action>();
+
+		if ((mazeState.numCat >= PENALTY)) {
+			return new ArrayList<>();
+
+		}
 
 		if (maze.containsCheese(mazeState.position)) {
 			if (!(mazeState.quesosComidos.contains(mazeState.position))) {
@@ -152,29 +162,24 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 			}
 		}
 
-		if (maze.containsCat(mazeState.position)&&(mazeState.numCat >= PENALTY)) {
-				System.out.println("MUERES AQUI");
-
-		} else {
-			for (Position pos : rechp) {
-				int x2 = pos.x;
-				int y2 = pos.y;
+		for (Position pos : rechp) {
+			int x2 = pos.x;
+			int y2 = pos.y;
 //			if ((x2 < 0 || x2 > maze.size - 1 || y2 < 0 || y2 > maze.size - 1)) {
 //				System.out.println("TE VAS FUERA");;
 //			}
 
-				if (x2 == x + 1 && y2 == y) {
-					possibleActions.add(MazeAction.RIGHT);
-				}
-				if (x2 == x - 1 && y2 == y) {
-					possibleActions.add(MazeAction.LEFT);
-				}
-				if (x2 == x && y2 == y - 1) {
-					possibleActions.add(MazeAction.UP);
-				}
-				if (x2 == x && y2 == y + 1) {
-					possibleActions.add(MazeAction.DOWN);
-				}
+			if (x2 == x + 1 && y2 == y) {
+				possibleActions.add(MazeAction.RIGHT);
+			}
+			if (x2 == x - 1 && y2 == y) {
+				possibleActions.add(MazeAction.LEFT);
+			}
+			if (x2 == x && y2 == y - 1) {
+				possibleActions.add(MazeAction.UP);
+			}
+			if (x2 == x && y2 == y + 1) {
+				possibleActions.add(MazeAction.DOWN);
 			}
 		}
 
@@ -187,23 +192,29 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 		MazeState mazestate = (MazeState) state;
 		MazeState estado_nuevo = (MazeState) applyAction(mazestate, action);
-		if (estado_nuevo.numCat == 1) {
-			return PENALTY;
+		if (estado_nuevo.numCat == 0) {
+			return 1;
 		}
-		return (double) 1;
+
+		return 2;
 	}
 
 	@Override
 	public boolean testGoal(State chosen) {
 		// TODO Auto-generated method stub //¿Soy estado objetivo?
 
-		MazeState choseeen = (MazeState) chosen;
+		MazeState state = (MazeState) chosen;
 
-		if ((choseeen.quesosComidos.size() == NUM_CHEESES)
-				&& (choseeen.position.x == maze.outputX && choseeen.position.y == maze.size - 1)) {
+//		if ((choseeen.quesosComidos.size() == NUM_CHEESES)
+//				&& (choseeen.position.x == maze.outputX && choseeen.position.y == maze.size - 1)) {
+//			return true;
+//		}
+//
+//		return false;
+
+		if (state.position.equals(maze.output()) && state.numQ == NUM_CHEESES && state.numCat<=1) {
 			return true;
 		}
-
 		return false;
 
 	}
@@ -211,7 +222,27 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	@Override
 	public double heuristic(State state) {
 		// TODO Auto-generated method stub
-		return 0;
+		
+		MazeState mazeState = (MazeState)state;
+		HashSet<Position> posicionesQueso = (HashSet) maze.cheesePositions;
+		ArrayList<Integer> sol =new ArrayList<>();
+		
+		int x=0;
+		
+		for(Position pos: posicionesQueso) {
+		 sol.add(((Math.abs(mazeState.position.x-pos.x))+((Math.abs(mazeState.position.y-pos.y)))));
+		
+		 System.out.println(x +"="+sol);
+		 x++;
+		}
+
+		int minValue = (Collections.min(sol));
+		
+		
+		System.out.println("Valor distancia minima: "+minValue);
+
+		return minValue;
+	
 	}
 
 	// VISUALIZATION
