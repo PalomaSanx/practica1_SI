@@ -28,7 +28,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	// Penalty factor for fight with the cat.
 	private static final double PENALTY = 2;
 	
-	public static String heuristica = null;
+	public String heuristica=null;
 
 	// numQ=0;
 
@@ -51,14 +51,15 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		int size = this.maze.size;
 		int seed = this.maze.seed;
 		int cats = this.maze.numCats;
-		
+		heuristica= this.heuristica;
 
 		if (args.length == 4)
 			try {
 				size = Integer.parseInt(args[0]);
 				cats = Integer.parseInt(args[1]);
 				seed = Integer.parseInt(args[2]);
-				heuristica = (args[3]);
+				heuristica = args[3];
+				System.out.println(heuristica);
 			} catch (Exception e) {
 				System.out.println("Parameters for MazeProblem are incorrect.");
 				return;
@@ -227,8 +228,8 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		ArrayList<Integer> sol =new ArrayList<>();
 		int minValue=0;
 		
-		System.out.println(heuristica);
-		if(this.heuristica=="h1") {
+		
+		if(this.heuristica.equals("h1")) {
 
 		int x=0;
 		
@@ -242,8 +243,10 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		minValue = (Collections.min(sol))+(Math.abs(mazeState.position.x-maze.outputX)+Math.abs(mazeState.position.y-maze.size-1));
 		
 		return minValue;
+		
 		}
-		if(this.heuristica=="h2") {
+		
+		if(this.heuristica.equals("h2")) {
 		//h2= distancia de manhattan (distancia desde state a Finalstate.
 			
 			minValue = (Math.abs(mazeState.position.x-maze.outputX)+Math.abs(mazeState.position.y-maze.size-1));

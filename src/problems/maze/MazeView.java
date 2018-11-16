@@ -264,7 +264,7 @@ public class MazeView extends ProblemView {
 			posHamsterPx = new Position(newX, newY); // New position
 			repaint();
 			try { // Waits 0.05 seconds
-				Thread.sleep(50);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 			}
 		}

@@ -68,6 +68,13 @@ public class Breath_first extends SearchAlgorithm {
 					totalCost = node.getCost();
 
 					actionSequence = recuperarRuta(node);
+					
+					System.out.println("tamaño ruta explorada ="+actionSequence.size()+"-->"+actionSequence);
+					int p = (int) (actionSequence.size()+this.openMaxSize);
+					System.out.println("espacio en memoria alg.prof="+p);
+					if (explored.size() > this.exploredMaxSize) {
+						this.exploredMaxSize = (int) (actionSequence.size()+this.openMaxSize);
+					}
 
 					solutionFound = true;
 					break;
@@ -84,21 +91,27 @@ public class Breath_first extends SearchAlgorithm {
 							insert(n, frontier);
 						}
 
-						explored.add(node.getState());
+			
+
 					}
 				}
 			}
-
+			explored.add(node.getState());
 			if (frontier.size() > this.openMaxSize) {
 				this.openMaxSize = frontier.size();
 			}
 			if (explored.size() > this.exploredMaxSize) {
 				this.exploredMaxSize = explored.size();
 			}
+			
+			
+			
 
 		}
 
 		Collections.reverse(actionSequence);
+		System.out.println("Nodos generados="+this.generatedNodes);
+		System.out.println("Profundidad="+node.getDepth());
 
 	}
 
@@ -107,7 +120,7 @@ public class Breath_first extends SearchAlgorithm {
 		// Crea una nueva secuencia de acciones para retornala.
 		ArrayList<Action> path = new ArrayList<Action>();
 
-		// Recover the path in a reverse order and calculate cost
+		
 		//recorre el camino en orden inverso y calcula el coste.
 		while (!(n.getState().equals(problem.initialState()))) {
 
@@ -117,6 +130,9 @@ public class Breath_first extends SearchAlgorithm {
 
 		return path;
 	}
+	
+	
+	
 	
 	//Para retornar un LinkedList con la frontera.
 	public Collection<Node> createFrontier() {

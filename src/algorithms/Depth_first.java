@@ -11,14 +11,14 @@ public class Depth_first extends Breath_first{
 	
 	@Override
     public Collection<Node> createFrontier() {
-        
+        // tipo LIFO (Last In - First Out, o último en entrar - primero en salir). 
         return new Stack<Node>();
     }
 
     /* Return the node extracted from the frontier */
     @Override
     public Node extract(Collection<Node> frontier) {
-        
+        //saca elemento de la pila
         return (((Stack<Node>) frontier).pop());
     }
 
