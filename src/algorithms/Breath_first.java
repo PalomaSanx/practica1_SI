@@ -13,7 +13,7 @@ import search.*;
 //ESTA CLASE IMPLEMENTA EL ALGORITMO DE BÚSQUEDA POR ANCHURA, SERÁ LA BASE PARA EL RESTO DE ALGORITMOS.
 public class Breath_first extends SearchAlgorithm {
 
-	int limit_heurist = 0;
+	int limit = 0;
 
 	@Override
 	public void setParams(String[] params) {
@@ -21,8 +21,8 @@ public class Breath_first extends SearchAlgorithm {
 		// ANCHURA no necesita
 
 		String[] s = params;
-		this.limit_heurist = Integer.parseInt(params[0]);
-		System.out.println("Limite_o_heuristica: " + limit_heurist);
+		this.limit = Integer.parseInt(params[0]);
+		System.out.println("Limite: " + limit);
 
 	}
 
@@ -49,8 +49,8 @@ public class Breath_first extends SearchAlgorithm {
 		int limit = 0;
 		// aqui se comprueba si se esta metiendo un límite por parametro, si es así, se
 		// añadirá dicho limite
-		if (this.limit_heurist != 0) {
-			limit = this.limit_heurist;
+		if (this.limit != 0) {
+			limit = this.limit;
 		} else { // sino, se establece un valor infinito para que se pueda realizar la búsqueda
 			limit = Integer.MAX_VALUE;
 		}
@@ -106,12 +106,14 @@ public class Breath_first extends SearchAlgorithm {
 			
 			
 			
+			
 
 		}
 
 		Collections.reverse(actionSequence);
 		System.out.println("Nodos generados="+this.generatedNodes);
-		System.out.println("Profundidad="+node.getDepth());
+		System.out.println("Profundidad="+node.getDepth()+"\n");
+		
 
 	}
 

@@ -27,8 +27,8 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	private static final int NUM_CHEESES = 3;
 	// Penalty factor for fight with the cat.
 	private static final double PENALTY = 2;
-	
-	public String heuristica=null;
+
+	public String heuristica = null;
 
 	// numQ=0;
 
@@ -51,7 +51,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		int size = this.maze.size;
 		int seed = this.maze.seed;
 		int cats = this.maze.numCats;
-		heuristica= this.heuristica;
+		heuristica = this.heuristica;
 
 		if (args.length == 4)
 			try {
@@ -59,7 +59,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 				cats = Integer.parseInt(args[1]);
 				seed = Integer.parseInt(args[2]);
 				heuristica = args[3];
-				System.out.println(heuristica);
+				System.out.println("heuristica:" + heuristica);
 			} catch (Exception e) {
 				System.out.println("Parameters for MazeProblem are incorrect.");
 				return;
@@ -92,9 +92,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 		int x = mazeState.position.x;
 		int y = mazeState.position.y;
 		int numCat = mazeState.numCat;
-		
-		
-		
+
 		if (maze.containsCat(mazeState.position)) {
 			numCat++;
 		}
@@ -106,23 +104,18 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 			break;
 		case RIGHT:
-			
-			
 
 			x++;
-
 
 			break;
 		case LEFT:
 
 			x--;
 
-
 			break;
 		case UP:
 
 			y--;
-
 
 			break;
 		case DOWN:
@@ -134,8 +127,6 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 //		if ((x < 0 || x > maze.size - 1 || y < 0 || y > maze.size - 1)) {
 //			return null;
 //		}
-
-
 
 		return new MazeState(x, y, quesoscomidosclon, numCat);
 
@@ -210,8 +201,7 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 
 		MazeState state = (MazeState) chosen;
 
-
-		if (state.position.equals(maze.output()) && state.numQ == NUM_CHEESES && state.numCat<=1) {
+		if (state.position.equals(maze.output()) && state.numQ == NUM_CHEESES && state.numCat <= 1) {
 			return true;
 		}
 		return false;
@@ -221,42 +211,91 @@ public class MazeProblem implements SearchProblem, ProblemVisualizable {
 	@Override
 	public double heuristic(State state) {
 		// TODO Auto-generated method stub
-		
-		//h1=es la heuristica de encontrar el primer queso y irse a la salida.
-		MazeState mazeState = (MazeState)state;
+
+		// h1=es la heuristica de encontrar el primer queso y irse a la salida.
+		MazeState mazeState = (MazeState) state;
+		HashSet<Position> posicionesQueso2 = (HashSet) maze.cheesePositions;
 		HashSet<Position> posicionesQueso = (HashSet) maze.cheesePositions;
-		ArrayList<Integer> sol =new ArrayList<>();
-		int minValue=0;
-		
-		
-		if(this.heuristica.equals("h1")) {
+		ArrayList<Integer> sol = new ArrayList<>();
+		HashSet<Position> queso = new HashSet<>();
+		int minValue = 0;
+		int minValue2 = 0;
+		int x = 0;
+		int Num_Q = this.NUM_CHEESES;
 
-		int x=0;
-		
-		for(Position pos: posicionesQueso) {
-		 sol.add(((Math.abs(mazeState.position.x-pos.x))+((Math.abs(mazeState.position.y-pos.y)))));
-		
-		 System.out.println(x +"="+sol);
-		 x++;
+		if (this.heuristica.equals("h1")) {
+			Position q = mazeState.position;
+			Position qAnterior = mazeState.position;
+
+			System.out.println(q);
+			while (Num_Q != 0) {
+				for (Position pos : posicionesQueso) {
+					if (!queso.contains(pos)) {
+						System.out.println("q" + q + "pos" + pos);
+
+						System.out.println("1---pos x =" + q.x + "pos y=" + q.y);
+
+						sol.add((Math.abs(q.x - pos.x)) + ((Math.abs(q.y - pos.y))));
+
+					}
+
+				}
+
+				minValue2 = minValue2 + (Collections.min(sol)); // distancia más cercana
+				System.out.println(minValue2 + "-->" + sol);// SOUT
+
+				for (Position pos2 : posicionesQueso) {
+					if (!queso.contains(pos2)) {
+						if (Collections.min(sol) == ((Math.abs(q.x - pos2.x)) + ((Math.abs(q.y - pos2.y))))) { // 2>=2
+							System.out.println(Collections.min(sol) + "== "+ ((Math.abs(q.x - pos2.x)) + ((Math.abs(q.y - pos2.y)))));
+							qAnterior = q;
+							q = pos2;
+							x++;
+							if (x == 2) {
+								if((Math.abs(qAnterior.x - maze.outputX) + Math.abs(qAnterior.y - (maze.size - 1))) >= (Math.abs(q.x - maze.outputX) + Math.abs(q.y - (maze.size - 1)))){
+									q = qAnterior;
+								}
+								
+							}
+
+						}
+					}
+
+				}
+				x = 0;
+				queso.add(q);
+				System.out.println("q " + q);// SOUT
+				System.out.println("---------------------------");// SOUT
+				// sol.remove(Collections.min(sol));
+				sol = new ArrayList<>();
+				Num_Q--;// ->2,->1,->0
+			}
+
+			minValue = minValue2 + (Math.abs(q.x - maze.outputX) + Math.abs(q.y - (maze.size - 1)));
+
+			System.out.println("heuristicaaaaaaaaaaaaaaaaaa=" + minValue);
+			System.out.println("---------------------------------");
+			return minValue;
+
 		}
 
-		minValue = (Collections.min(sol))+(Math.abs(mazeState.position.x-maze.outputX)+Math.abs(mazeState.position.y-maze.size-1));
-		
-		return minValue;
-		
+		if (this.heuristica.equals("h2")) {
+			// h2= distancia de manhattan (distancia desde state a Finalstate.
+
+			for (Position pos : posicionesQueso2) { // cogemos todas la posiciones
+				sol.add(((Math.abs(mazeState.position.x - pos.x)) + ((Math.abs(mazeState.position.y - pos.y)))));
+				System.out.println(x + "=" + sol);
+				x++;
+			}
+
+			minValue = (Collections.min(sol))
+					+ (Math.abs(mazeState.position.x - maze.outputX) + Math.abs(mazeState.position.y - maze.size - 1));
+
+			return minValue;
 		}
-		
-		if(this.heuristica.equals("h2")) {
-		//h2= distancia de manhattan (distancia desde state a Finalstate.
-			
-			minValue = (Math.abs(mazeState.position.x-maze.outputX)+Math.abs(mazeState.position.y-maze.size-1));
-			
-		return minValue;	
-		}
-		
-		
+
 		return minValue;
-	
+
 	}
 
 	// VISUALIZATION

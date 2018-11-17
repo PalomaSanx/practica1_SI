@@ -106,6 +106,8 @@ public abstract class SearchAlgorithm{
 			newNode.setCost(node.getCost()+ costAction);
 			// Adds the heuristic. It depends on the problem.
 			newNode.setHeuristic(problem.heuristic(newState));
+			
+
 			// Updates its depth.
 			newNode.setDepth(node.getDepth()+1);
 			//Adds it to the list.
